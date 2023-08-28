@@ -2,7 +2,6 @@ import os
 import re
 import shutil
 from transliterate import translit
-from decorators import worktime_decorator
 
 
 def contains_cyrillic(text):
@@ -72,7 +71,6 @@ def process_folder(path):
 			os.rmdir(folder_path)
 
 
-@worktime_decorator
 def main():
 	initial_path = 'E:\Chrome_Downloads'
 	process_folder(initial_path)
