@@ -52,47 +52,54 @@ def show_all_contacts():
 	return "\n".join([f"{name}: {phone}" for name, phone in contacts.items()])
 
 
+def hello_command():
+	print("How can I help you?")
+
+
+def add_command(contact_info):
+	result = add_contact(contact_info)
+	print(result)
+
+
+def change_command(contact_info):
+	result = change_phone(contact_info)
+	print(result)
+
+
+def phone_command(contact_info):
+	try:
+		result = get_phone(contact_info)
+		print(f"{result[0]}'s phone number is {result[1]}")
+	except KeyError:
+		print("Contact not found")
+
+	except ValueError:
+		print("Please, write contact name")
+
+
+def show_all_command():
+	result = show_all_contacts()
+	print(result)
+
+
+def exit_command():
+	print("Good bye!")
+	return True
+
+
+command_actions = {
+	"hello": hello_command,
+	"add": add_command,
+	"change": change_command,
+	"phone": phone_command,
+	"show": show_all_command,
+	"good": exit_command,
+	"close": exit_command,
+	"exit": exit_command
+}
+
+
 def main():
-	def hello_command():
-		print("How can I help you?")
-
-	def add_command(contact_info):
-		result = add_contact(contact_info)
-		print(result)
-
-	def change_command(contact_info):
-		result = change_phone(contact_info)
-		print(result)
-
-	def phone_command(contact_info):
-		try:
-			result = get_phone(contact_info)
-			print(f"{result[0]}'s phone number is {result[1]}")
-		except KeyError:
-			print("Contact not found")
-
-		except ValueError:
-			print("Please, write contact name")
-
-	def show_all_command():
-		result = show_all_contacts()
-		print(result)
-
-	def exit_command():
-		print("Good bye!")
-		return True
-
-	command_actions = {
-		"hello": hello_command,
-		"add": add_command,
-		"change": change_command,
-		"phone": phone_command,
-		"show": show_all_command,
-		"good": exit_command,
-		"close": exit_command,
-		"exit": exit_command
-	}
-
 	while True:
 		command = input("Enter a command: ").strip().lower().split()
 		main_command = command[0]
