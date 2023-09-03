@@ -1,7 +1,14 @@
 import os
 import re
 import shutil
-from transliterate import translit
+
+TRANSLITERATION_DICT = {
+	'а': 'a', 'б': 'b', 'в': 'v', 'г': 'g', 'д': 'd', 'е': 'e', 'ё': 'yo',
+	'ж': 'zh', 'з': 'z', 'и': 'i', 'й': 'y', 'к': 'k', 'л': 'l', 'м': 'm',
+	'н': 'n', 'о': 'o', 'п': 'p', 'р': 'r', 'с': 's', 'т': 't', 'у': 'u',
+	'ф': 'f', 'х': 'kh', 'ц': 'ts', 'ч': 'ch', 'ш': 'sh', 'щ': 'shch',
+	'ъ': '', 'ы': 'y', 'ь': '', 'э': 'e', 'ю': 'yu', 'я': 'ya'
+}
 
 
 def contains_cyrillic(text):
@@ -10,7 +17,7 @@ def contains_cyrillic(text):
 
 def normalize(name):
 	if contains_cyrillic(name):
-		name = translit(name, reversed=True)
+		name = ''.join([TRANSLITERATION_DICT.get(char, char) for char in name])
 	if any(char.isupper() for char in name):
 		name = name.lower()
 	name = name.replace(' ', '_')
