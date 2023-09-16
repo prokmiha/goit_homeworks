@@ -32,6 +32,7 @@ class Record:
 	def add_phone(self, phone):
 		if Phone.is_valid(phone):
 			self.phones.append(Phone(value=phone))
+			return True
 		else:
 			if len(self.phones) == 0:
 				del self.name

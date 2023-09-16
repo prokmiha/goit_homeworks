@@ -6,10 +6,12 @@ def add_contact(name, number, address_book):
 		result = add_to_contact(name, number, address_book)
 		return result
 	record = Record(name)
-	if not record.add_phone(number):
+	result = record.add_phone(number)
+	if not result:
 		return 'Invalid phone number'
-	address_book.add_record(record)
-	return "Contact added successfully"
+	else:
+		address_book.add_record(record)
+		return "Contact added successfully"
 
 
 def add_to_contact(name, number, address_book):
