@@ -1,5 +1,5 @@
 from classes_homework.actions import add_contact, show_all_contacts, remove_contact, \
-	contact_search, remove_only_number, edit_contact, number_search
+	contact_search, remove_only_number, edit_contact, number_search, add_birthday_to_contact, when_birthday
 from classes_homework.classes import AddressBook
 from classes_homework.decorators_errors import input_error, Errors
 
@@ -69,6 +69,26 @@ def search_command(address_book, criteria):
 		print(result)
 
 
+@input_error
+def bd_command(address_book, command):
+	try:
+		_, name, birthday = command.split()
+	except ValueError:
+		raise Errors.IncorrectEditCommand
+	result = add_birthday_to_contact(name, birthday, address_book)
+	print(result)
+
+
+@input_error
+def when_bd_command(address_book, command):
+	try:
+		_, name = command.split()
+	except:
+		raise Errors.MissedNameError
+	result = when_birthday(name, address_book)
+	print(result)
+
+
 def hello_command(_):
 	print('Hello, how can I help you?')
 
@@ -85,6 +105,8 @@ command_actions = {
 	"close": exit_command,
 	"exit": exit_command,
 	"add": add_command,
+	"birthday": bd_command,
+	"when": when_bd_command,
 	"edit": edit_command,
 	"remove": remove_command,
 	"find": search_command

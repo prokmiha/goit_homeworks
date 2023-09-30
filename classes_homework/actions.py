@@ -82,6 +82,31 @@ def show_all_contacts(address_book):
 	for name, records in address_book.data.items():
 		for record in records:
 			phone_numbers = [phone.value for phone in record.phones]
-			result.append(f"{name}: {', '.join(phone_numbers)}")
+			birthday = record.birthday.value
+			result.append(f"{name}: {', '.join(phone_numbers)}\n{birthday}")
 
 	return "\n".join(result)
+
+
+def add_birthday_to_contact(name, birthday, address_book):
+	if name in address_book.data:
+		records = address_book.data[name]
+		for record in records:
+			if not hasattr(record, 'birthday'):
+				record.add_birthday(birthday)
+			else:
+				record.birthday.value = birthday
+		return f"Birthday added/updated for {name}"
+	else:
+		return f'Contact {name} not found'
+
+
+def when_birthday(name, address_book):
+	if name in address_book.data:
+		records = address_book.data[name]
+		for record in records:
+			result = record.days_to_birthday()
+			if isinstance(result, int):
+				return f"There is {result} days to {name}'s birthday"
+	else:
+		return 'Contact not found'
