@@ -1,5 +1,7 @@
+import os
+
 from classes_homework.actions import add_contact, show_all_contacts, remove_contact, \
-	contact_search, remove_only_number, edit_contact, number_search, add_birthday_to_contact, when_birthday
+	contact_search, remove_only_number, edit_contact, number_search, add_birthday_to_contact, when_birthday, find_all_matches
 from classes_homework.classes import AddressBook
 from classes_homework.decorators_errors import input_error, Errors
 
@@ -29,7 +31,7 @@ def show_all_command(address_book):
 	print(result)
 
 
-@input_error
+# @input_error
 def remove_command(address_book, command):
 	try:
 		_, name = command.split()
@@ -49,7 +51,6 @@ def remove_command(address_book, command):
 			print(result)
 	except:
 		raise Errors.IncorrectRemoveRequest
-
 
 @input_error
 def search_command(address_book, criteria):
@@ -89,6 +90,14 @@ def when_bd_command(address_book, command):
 	print(result)
 
 
+def find_all_command(address_book, command):
+	try:
+		_, query = command.split()
+	except:
+		raise Errors.MissedNameError
+	find_all_matches(query, address_book)
+
+
 def hello_command(_):
 	print('Hello, how can I help you?')
 
@@ -109,13 +118,19 @@ command_actions = {
 	"when": when_bd_command,
 	"edit": edit_command,
 	"remove": remove_command,
-	"find": search_command
+	"find": search_command,
+	"all": find_all_command
 }
 
 
 @input_error
 def main():
-	address_book = AddressBook()
+	if not os.path.exists("address_book.json"):
+		address_book = AddressBook()
+		address_book.save_to_file("address_book.json")
+	else:
+		address_book = AddressBook()
+		address_book.load_from_file("address_book.json")
 
 	while True:
 		command = input("Enter a command: ").strip().lower()
@@ -126,9 +141,11 @@ def main():
 			if main_command in ['hello', 'show', 'good', 'close', 'exit']:
 				process = action(address_book)
 				if process:
+					address_book.save_to_file("address_book.json")
 					break
 			else:
 				action(address_book, command)
+				address_book.save_to_file("address_book.json")
 		else:
 			print("Invalid command")
 

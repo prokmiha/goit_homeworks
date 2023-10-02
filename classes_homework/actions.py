@@ -32,8 +32,7 @@ def edit_contact(name, old_phone, new_phone, address_book):
 
 
 def remove_contact(name, address_book):
-	record = Record(name)
-	result = address_book.delete(record)
+	result = address_book.delete(name)
 	if result:
 		return f"Contact {name} successfully removed"
 	return None
@@ -82,8 +81,11 @@ def show_all_contacts(address_book):
 	for name, records in address_book.data.items():
 		for record in records:
 			phone_numbers = [phone.value for phone in record.phones]
-			birthday = record.birthday.value
-			result.append(f"{name}: {', '.join(phone_numbers)}\n{birthday}")
+			if hasattr(record, 'birthday'):
+				birthday = record.birthday.value
+				result.append(f"{name}: {', '.join(phone_numbers)}\n{birthday}")
+			else:
+				result.append(f"{name}: {', '.join(phone_numbers)}")
 
 	return "\n".join(result)
 
@@ -110,3 +112,19 @@ def when_birthday(name, address_book):
 				return f"There is {result} days to {name}'s birthday"
 	else:
 		return 'Contact not found'
+
+
+def find_all_matches(query, address_book):
+	matching_contacts = address_book.find_all_matches(query)
+
+	if matching_contacts:
+		print("Matching contacts:")
+		for contact in matching_contacts:
+			print(contact.name.value)
+			for phone in contact.phones:
+				print(f"Phone: {phone.value}")
+			if hasattr(contact, 'birthday'):
+				print(f"Birthday: {contact.birthday.value}")
+			print()
+	else:
+		print("No matching contacts found.")
